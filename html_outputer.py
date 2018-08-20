@@ -5,4 +5,32 @@
 # @Link    : ${link}
 # @Version : $Id$
 
-import os
+
+class HtmlOutputer(object):
+	"""docstring for HtmlOutputer"""
+	def __init__(self, arg):
+		self.datas = []
+
+		super(HtmlOutputer, self).__init__()
+		self.arg = arg
+		
+	def collect_data(self, data):
+		if data is None:
+			return
+		self.datas.append(data)
+
+	def output_data(self):
+		fout = open('output.html', 'w')
+
+		fout.write('<html>')
+		fout.write('<body>')
+		fout.write('<table>')
+		for data in datas:
+			fout.write('<tr>')
+			fout.write('<td>%s</td>' % data['url'].encode('utf-8'))
+			fout.write('<td>%s</td>' % data['title'].encode('utf-8'))
+			fout.write('<td>%s</td>' % data['content'].encode('utf-8'))
+			fout.write('</tr>')
+		fout.write('<、table>')
+		fout.write('<、body>')
+		fout.write('<、html>')

@@ -5,13 +5,9 @@
 # @Link    : ${link}
 # @Version : $Id$
 
-import bs4, re
+import bs4, re, urllib
 
 class HtmlParser(object):
-	"""docstring for HtmlParser"""
-	def __init__(self, arg):
-		super(HtmlParser, self).__init__()
-		self.arg = arg
 		
 	def parse(self, page_url, html_content):
 		if page_url is None or html_content is None:
@@ -19,13 +15,33 @@ class HtmlParser(object):
 
 		soup = bs4.BeautifulSoup(page_url, 'html.parser')
 
-		new_urls = self.get_new_urls(page_url, soup)
-		new_data = self.get_new_data(page_url, soup)
+		new_urls = self._get_new_urls(page_url, soup)
+		new_data = self._get_new_data(page_url, soup)
 		return new_urls, new_data
 
-	def get_new_urls(self, page_url, soup):
-		# /python/python-
-		links = soup.find_all('a', href = re.compile(r''))
+	def _get_new_urls(self, page_url, soup):
+		new_urls = set()
 
-	def get_new_data(self, page_url, soup):
-		pass
+		# /wiki/*Python*
+		links = soup.find_all('a', href = re.compile(r'/wiki/([a-z]+)Python([a-z]+)', re.I))
+		for link in links:
+			new_url = link['href']
+			new_full_url = urllib.parse.urljoin(page_url, new_url)
+			new_urls.add(new_full_url)
+		return new_urls
+
+	def _get_new_data(self, page_url, soup):
+		res_data = {}
+
+		# url
+		res_data['url'] = page_url
+
+		# <h1 id="firstHeading" class="firstHeading" lang="en">Python</h1>
+		title_node = soup.find('h1', class = 'firstHeading')
+		res_data['title'] = title_node.get_text()
+
+		# <div id="bodyContent" class="mw-body-content">
+		content_node = soup.find('div', id = 'bodyContent')
+		res_data['content'] = content_node.get_text()
+
+		return res_data
