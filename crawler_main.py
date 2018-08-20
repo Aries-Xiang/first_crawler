@@ -41,7 +41,7 @@ class crawler(object):
 		self.outputer.output_html()
 
 if __name__ == '__main__':
-	# 菜鸟教程Python主页
-	root_url = 'http://www.runoob.com/python/python-tutorial.html'
+	# 维基百科Python主页
+	root_url = 'https://en.wikipedia.org/wiki/Python'
 	obj_crawler = CrawlerMain()
 	obj_crawler.start()
