@@ -4,10 +4,13 @@
 # @Author  : XiangBingguang (18182556558@163.com)
 # @Link    : ${link}
 # @Version : $Id$
+import html_outputer
+import html_parser
+import url_downloader
+import url_manager
 
 
-class crawler(object):
-	"""docstring for crawler"""
+class CrawlerMain:
 	def __init__(self):
 		# 初始化url管理器
 		self.urls = url_manager.UrlManager()
@@ -25,10 +28,9 @@ class crawler(object):
 			# 爬取1000条限制
 			if count == 1000:
 				break
-			# 对无法的url报错
 			try:
 				new_url = self.urls.get_new_url()
-				print('start craw &d 个: s%' %(count, new_url))
+				print('craw %d : %s'%(count, new_url))
 				# 获取当前url页面代码
 				html_cont = self.downloader.download(new_url)
 				# 解析出新的url和需要抓取的数据
@@ -44,4 +46,4 @@ if __name__ == '__main__':
 	# 维基百科Python主页
 	root_url = 'https://en.wikipedia.org/wiki/Python'
 	obj_crawler = CrawlerMain()
-	obj_crawler.start()
+	obj_crawler.start(root_url)
