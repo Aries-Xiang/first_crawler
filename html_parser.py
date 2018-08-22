@@ -5,7 +5,7 @@
 # @Link    : ${link}
 # @Version : $Id$
 
-import bs4, re, urllib
+import bs4, re, urllib.parse, urllib.request
 
 
 class HtmlParser(object):
@@ -14,7 +14,7 @@ class HtmlParser(object):
         if page_url is None or html_content is None:
             return
 
-        soup = bs4.BeautifulSoup(page_url, 'html.parser')
+        soup = bs4.BeautifulSoup(urllib.request.urlopen(page_url), 'html.parser')
 
         new_urls = self._get_new_urls(soup)
         new_data = self._get_new_data(page_url, soup)
@@ -23,9 +23,8 @@ class HtmlParser(object):
     def _get_new_urls(self, soup):
         new_urls = set()
         root_url = 'https://en.wikipedia.org'
-
         # /wiki/*Python*
-        links = soup.find_all('a', href=re.compile(r'/wiki/([a-z]+)Python([a-z]+)', re.I))
+        links = soup.find_all('a', href=re.compile(r'/wiki/Python_([\s\S])([a-z0-9]+)', re.I))
         for link in links:
             new_url = link['href']
             new_full_url = urllib.parse.urljoin(root_url, new_url)

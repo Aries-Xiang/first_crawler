@@ -36,7 +36,7 @@ class CrawlerMain:
 				# 解析出新的url和需要抓取的数据
 				new_urls, new_data = self.parser.parse(new_url, html_cont)
 				self.urls.add_new_urls(new_urls)
-				self.outputer.collect(new_data)
+				self.outputer.collect_data(new_data)
 				count = count + 1
 			except:
 				print('craw error')
